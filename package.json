@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
-    "current-test": "npm start -- 2015-12-04"
+    "current-test": "npm start -- 2015-12-05_02"
   },
   "keywords": [],
   "author": "",
