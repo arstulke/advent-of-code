@@ -25,17 +25,15 @@ export default async function (puzzleKey): Promise<void> {
         executeInstructionRange(grid, instruction);
     }
 
-    let lightsOn = 0;
+    let totalBrightness = 0;
     for (let x = 0; x <= 999; x++) {
         const column = grid[x] || {};
         for (let y = 0; y <= 999; y++) {
-            if (column[y]) {
-                lightsOn++;
-            }
+            totalBrightness += (column[y] || 0);
         }
     }
 
-    console.log('lights on: ' + lightsOn);
+    console.log('lights on: ' + totalBrightness);
 }
 
 function parseCommand(coordinateStr: string): Coordinate {
@@ -67,15 +65,20 @@ function executeInstructionRange(grid: any, instruction: Instruction) {
 }
 
 function executeInstructionLight(grid: any, x: number, y: number, command: Command) {
-    if (!(x in grid)) {
+    if (typeof grid[x] !== 'object') {
         grid[x] = {};
     }
+    if (typeof grid[x][y] !== 'number') {
+        grid[x][y] = 0;
+    }
+
 
     if (command === 'toggle') {
-        grid[x][y] = !grid[x][y];
+        grid[x][y] += 2;
     } else if (command === 'turn on') {
-        grid[x][y] = true;
+        grid[x][y] += 1;
     } else if (command === 'turn off') {
-        grid[x][y] = false;
+        grid[x][y] -= 1;
     }
+    grid[x][y] = Math.max(grid[x][y], 0);
 }
