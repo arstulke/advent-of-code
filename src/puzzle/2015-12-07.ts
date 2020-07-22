@@ -20,7 +20,7 @@ export default async function (puzzleKey): Promise<void> {
     const wires = input.split('\n');
 
 
-    const valueStore: any = {};
+    let valueStore: any = {};
     const valueProvider: ValueProvider =
         (valueExpr: string) => valueStore[valueExpr] || parseInt(valueExpr, 10);
 
@@ -33,21 +33,29 @@ export default async function (puzzleKey): Promise<void> {
         }
     }
 
-    for (const input in wireStore) {
-        const isNumber = input.match(/^[0-9]+$/);
-        if (isNumber) {
-            valueStore[input] = parseInt(input, 10);
-        }
-    }
-
+    // #1
     calculateWireValues(valueStore, wireStore, valueProvider);
-    console.log('a: ' + valueStore['a']);
+    const result1 = valueStore['a'];
+    console.log('\nPart 1\na: ' + result1 + '\n');
+
+    // #2
+    valueStore = { b: result1 }; // reset valueStore and set override wire b to old value of wire a
+    calculateWireValues(valueStore, wireStore, valueProvider);
+    const result2 = valueStore['a'];
+    console.log('Part 2\na: ' + result2 + '\n');
 }
 
 function calculateWireValues(
     valueStore: any,
     wireStore: any,
     valueProvider: ValueProvider) {
+
+    for (const input in wireStore) {
+        const isNumber = input.match(/^[0-9]+$/);
+        if (isNumber) {
+            valueStore[input] = parseInt(input, 10);
+        }
+    }
 
     let newValues: string[] = Object.keys(valueStore);
     while (newValues.length > 0) {
