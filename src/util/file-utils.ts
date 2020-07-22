@@ -1,12 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export async function readInput(inputKey: string): Promise<string> {
+export async function readInput(inputKey: string, fileExtension: string = 'txt'): Promise<string> {
+    const filename = path.resolve('src/input', inputKey + '.' + fileExtension);
     return await new Promise((resolve) => {
-        const filename = path.resolve('src/input', inputKey + '.txt');
         fs.readFile(filename, (err, data: Buffer) => {
-            const content: string = data.toString('utf8');
-            resolve(content);
+            resolve(data.toString('utf8'));
         });
     });
 }
