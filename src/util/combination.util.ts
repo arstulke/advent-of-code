@@ -33,3 +33,30 @@ export function getAllNumericCombinations(itemCount: number): number[][] {
     })();
     return getInheritedCombinations([], possibleValues);
 }
+
+export function getAllPartCombinations(partCount: number, maxValue: number): number[][] {
+    const combinations = [];
+
+    const parts = [];
+    for (let i = 0; i < partCount; i++) {
+        parts[i] = 0;
+    }
+    while(parts[0] <= maxValue) {
+        const lastIndex = partCount - 1;
+        parts[lastIndex]++;
+        for (let i = lastIndex; i > 0; i--) {
+            if (parts[i] > maxValue) {
+                parts[i] = 0;
+                parts[i - 1]++;
+            }
+        }
+
+        const sum = parts.reduce((a, b) => a + b, 0);
+        if (sum === maxValue) {
+            const newCombination = parts.slice();
+            combinations.push(newCombination);
+        }
+    }
+
+    return combinations;
+}
